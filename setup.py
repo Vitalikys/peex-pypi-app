@@ -6,7 +6,7 @@ with open("README.md", 'r') as f:
 
 setup(
         name='kostsample',
-        version='1.0',
+        version='1.0.1',
         description='python-sample-app is a starter template for new python applications',
         author='Benjamin Costa & Vitalii Kostyreva',
         author_email='kostyreva-09876@gmail.com',
