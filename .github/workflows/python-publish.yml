@@ -88,6 +88,7 @@ jobs:
       with:
         repository-url: https://github.com/Vitalikys/peex-pypi-app
         #repository-url: https://github.com/Vitalikys/peex-pypi-app.git
-        user: __token__
+        # user: __token__
+        user: ${{ secrets.PYPI_API_TOKEN }} 
         password: ${{ secrets.PYPI_API_TOKEN }}
       
