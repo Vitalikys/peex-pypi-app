@@ -21,7 +21,7 @@ on:
         description: 'Test PYPI pipeline'
   push:
     branches:
-      - main
+      - "deploy"
     paths:
       - "frontend/**"
 permissions:
@@ -50,45 +50,21 @@ jobs:
           python -m build
           ls 
           ls dist/
-          
-          # python setup.py sdist
-          # twine upload dist/*
-   
-    # - name: Create GitHub Release not useful for us
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-    #   run: >-
-    #     gh release create "ver2"
-    #     --repo 'https://github.com/Vitalikys/peex-pypi-app.git'
-    #     --notes "ver 2"
-        
-    # - name: Upload artifact signatures to GitHub Release
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-    #   # Upload to GitHub Release using the `gh` CLI.
-    #   # `dist/` contains the built packages, and the
-    #   # sigstore-produced signatures and certificates.
-    #   run: >-
-    #     gh release upload
-    #     'pyp' dist/**
-    #     --repo 'https://github.com/Vitalikys/peex-pypi-app.git'
-    # - name: Publish package
-    #   uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+
+    - name: Upload artifact signatures to GitHub Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+      run: >-
+        gh release upload
+        'pyp' dist/**
+        --repo 'https://github.com/Vitalikys/peex-pypi-app.git'
+
+    # - name: Publish package distributions to GIT PyPI
+    #   uses: pypa/gh-action-pypi-publish@release/v1.9
     #   with:
-    #     url: https://github.com/Vitalikys/peex-pypi-app.git
-    #     user: __token__
+    #     repository-url: https://github.com/Vitalikys/peex-pypi-app
+    #     #repository-url: https://github.com/Vitalikys/peex-pypi-app.git
+    #     # user: __token__
+    #     user: ${{ secrets.PYPI_API_TOKEN }} 
     #     password: ${{ secrets.PYPI_API_TOKEN }}
-    # - name: Download all the dists
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: python-package
-    #     path: dist/
-    - name: Publish package distributions to GIT PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1.9
-      with:
-        repository-url: https://github.com/Vitalikys/peex-pypi-app
-        #repository-url: https://github.com/Vitalikys/peex-pypi-app.git
-        # user: __token__
-        user: ${{ secrets.PYPI_API_TOKEN }} 
-        password: ${{ secrets.PYPI_API_TOKEN }}
       
