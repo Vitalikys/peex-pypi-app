@@ -20,8 +20,9 @@ on:
       tags:
         description: 'Test PYPI pipeline'
   push:
+    branches:
+      - main
     paths:
-      - "main"
       - "frontend/**"
 permissions:
   contents: read
@@ -57,9 +58,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
       run: >-
-        gh release create ${{github.sha}}
+        gh release create "ver2"
         --repo 'https://github.com/Vitalikys/peex-pypi-app.git'
-        --notes "ver ${{github.sha}}"
+        --notes "ver 2"
     # - name: Upload artifact signatures to GitHub Release
     #   env:
     #     GITHUB_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
