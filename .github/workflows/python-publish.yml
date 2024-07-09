@@ -52,12 +52,7 @@ jobs:
           
           # python setup.py sdist
           # twine upload dist/*
-    - name: Sign the dists with Sigstore
-      uses: sigstore/gh-action-sigstore-python@v2.1.1
-      with:
-        inputs: >-
-          ./dist/*.tar.gz
-          ./dist/*.whl
+   
     - name: Create GitHub Release
       env:
         GITHUB_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
@@ -87,4 +82,10 @@ jobs:
     #   with:
     #     name: python-package
     #     path: dist/
+    - name: Publish package distributions to GIT PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1.9
+      with:
+        repository-url: https://github.com/Vitalikys/peex-pypi-app.git
+        user: __token__
+        password: ${{ secrets.PYPI_API_TOKEN }}
       
