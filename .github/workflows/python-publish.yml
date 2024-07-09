@@ -48,13 +48,19 @@ jobs:
       run: |
           python -m build
           ls 
+          ls dist/
           
           # python setup.py sdist
           # twine upload dist/*
-    - name: Publish package
-      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+    # - name: Publish package
+    #   uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+    #   with:
+    #     url: https://github.com/Vitalikys/peex-pypi-app.git
+    #     user: __token__
+    #     password: ${{ secrets.PYPI_API_TOKEN }}
+    - name: Download all the dists
+      uses: actions/download-artifact@v4
       with:
-        url: https://github.com/Vitalikys/peex-pypi-app.git
-        user: __token__
-        password: ${{ secrets.PYPI_API_TOKEN }}
+        name: python-package
+        path: dist/
       
