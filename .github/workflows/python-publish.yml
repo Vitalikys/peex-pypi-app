@@ -52,15 +52,39 @@ jobs:
           
           # python setup.py sdist
           # twine upload dist/*
+    - name: Sign the dists with Sigstore
+      uses: sigstore/gh-action-sigstore-python@v2.1.1
+      with:
+        inputs: >-
+          ./dist/*.tar.gz
+          ./dist/*.whl
+    - name: Create GitHub Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+      run: >-
+        gh release create
+        'pyp'
+        --repo 'https://github.com/Vitalikys/peex-pypi-app.git'
+        --notes "v12"
+    - name: Upload artifact signatures to GitHub Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+      # Upload to GitHub Release using the `gh` CLI.
+      # `dist/` contains the built packages, and the
+      # sigstore-produced signatures and certificates.
+      run: >-
+        gh release upload
+        'pyp' dist/**
+        --repo 'https://github.com/Vitalikys/peex-pypi-app.git'
     # - name: Publish package
     #   uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
     #   with:
     #     url: https://github.com/Vitalikys/peex-pypi-app.git
     #     user: __token__
     #     password: ${{ secrets.PYPI_API_TOKEN }}
-    - name: Download all the dists
-      uses: actions/upload-artifact@v4
-      with:
-        name: python-package
-        path: dist/
+    # - name: Download all the dists
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: python-package
+    #     path: dist/
       
